@@ -6,13 +6,20 @@ import {
   View,
   Keyboard,
   Button,
+  Dimensions,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
 } from "react-native";
 import React, { useState } from "react";
 import Card from "../components/Card";
 import colors from "../constants/colors";
 import Input from "../components/Input";
 
-const StartGameScreen = ({onStartGame}) => {
+const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
+
+const StartGameScreen = ({ onStartGame }) => {
   const [value, setValue] = useState("");
   const [confirmed, setConfirmed] = useState(false);
   const [selectedNumber, setSelectedNumber] = useState("");
@@ -37,35 +44,48 @@ const StartGameScreen = ({onStartGame}) => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={styles.screen}>
-        <Card>
-          <Text>Elije un numero</Text>
-          <Input value={value} onChangeText={handleInput} />
-          <View style={styles.buttonContainer}>
-            <Pressable style={styles.cleanButton} onPress={handleResetInput}>
-              <Text style={{ color: "white" }}>Limpiar</Text>
-            </Pressable>
-            <Pressable
-              style={{
-                ...styles.cleanButton,
-                ...styles.confirmButton,
-              }}
-              onPress={handleConfirmation}
-            >
-              <Text style={{ color: "white" }}>Confirmar</Text>
-            </Pressable>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "height" : "padding"}
+    >
+      <ScrollView>
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+          <View style={styles.screen}>
+            <Card>
+              <Text>Elije un numero</Text>
+              <Input value={value} onChangeText={handleInput} />
+              <View style={styles.buttonContainer}>
+                <Pressable
+                  style={styles.cleanButton}
+                  onPress={handleResetInput}
+                >
+                  <Text style={{ color: "white" }}>Limpiar</Text>
+                </Pressable>
+                <Pressable
+                  style={{
+                    ...styles.cleanButton,
+                    ...styles.confirmButton,
+                  }}
+                  onPress={handleConfirmation}
+                >
+                  <Text style={{ color: "white" }}>Confirmar</Text>
+                </Pressable>
+              </View>
+            </Card>
+            {confirmed && (
+              <Card newStyles={{ marginTop: 50, width: 150 }}>
+                <Text>Tu numero</Text>
+                <Text>{selectedNumber}</Text>
+                <Button
+                  title="Empezar juego"
+                  onPress={() => onStartGame(selectedNumber)}
+                />
+              </Card>
+            )}
           </View>
-        </Card>
-        {confirmed && (
-          <Card newStyles={{ marginTop: 50, width: 150 }}>
-            <Text>Tu numero</Text>
-            <Text>{selectedNumber}</Text>
-            <Button title="Empezar juego" onPress={() => onStartGame(selectedNumber)} />
-          </Card>
-        )}
-      </View>
-    </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -86,13 +106,13 @@ const styles = StyleSheet.create({
   cleanButton: {
     backgroundColor: colors.secondary,
     height: 35,
-    width: 70,
+    width: "40%",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
   },
   confirmButton: {
     backgroundColor: colors.primary,
-    width: 80,
+    width: "40%",
   },
 });
