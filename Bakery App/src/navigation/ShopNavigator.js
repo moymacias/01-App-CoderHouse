@@ -9,37 +9,37 @@ const Stack = createNativeStackNavigator();
 
 export default ShopNavigator = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Categories"
-        screenOptions={{
-          headerStyle: { backgroundColor: COLORS.primary },
-          headerTintColor: COLORS.secondary,
-          headerTitleStyle: {
-            fontWeight: "bold",
-          },
+    <Stack.Navigator
+      initialRouteName="Categories"
+      screenOptions={{
+        headerStyle: { backgroundColor: COLORS.primary },
+        headerTintColor: COLORS.secondary,
+        headerTitleStyle: {
+          fontWeight: "bold",
+        },
+      }}
+    >
+      <Stack.Screen
+        name="Categories"
+        component={CategoriesScreen}
+        options={{
+          title: "Mi Panaderia",
         }}
-      >
-        <Stack.Screen
-          name="Categories"
-          component={CategoriesScreen}
-          options={{
-            title: "Mi Panaderia",
-          }}
-        />
-        <Stack.Screen
-          name="Bread"
-          component={CategoryBreadScreen}
-          options={({ route }) => ({
-            title: route.params.name,
-          })}
-        />
-        <Stack.Screen name="Details" component={BreadDetailsScreen} 
+      />
+      <Stack.Screen
+        name="Bread"
+        component={CategoryBreadScreen}
         options={({ route }) => ({
           title: route.params.name,
         })}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+      />
+      <Stack.Screen
+        name="Details"
+        component={BreadDetailsScreen}
+        options={({ route }) => ({
+          title: route.params.name,
+        })}
+      />
+    </Stack.Navigator>
   );
 };
