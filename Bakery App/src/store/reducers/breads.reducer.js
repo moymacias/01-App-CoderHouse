@@ -12,7 +12,7 @@ const BreadReducer = (state = initialState, action) => {
     case SELECTED_BREAD:
       return {
         ...state,
-        selected: state.breads.find((bread) => bread.id === action.breadId),
+        selected: state.breads.find((bread) => bread.id === action.breadID),
       };
     case FILTERED_BREAD:
       return {
