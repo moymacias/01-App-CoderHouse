@@ -6,7 +6,6 @@ import OrderItem from "../components/OrderItem";
 
 const OrdersScreen = () => {
   const dispatch = useDispatch();
-
   const orders = useSelector((state) => state.orders.list);
 
   useEffect(() => {
@@ -17,9 +16,9 @@ const OrdersScreen = () => {
     console.log("eliminar");
   };
 
-  const renderItem = ({ item }) => {
-    <OrderItem item={item} onDelete={handleDeleteItem} />;
-  };
+  const renderItem = ({ item }) => (
+    <OrderItem item={item} onDelete={handleDeleteItem} />
+  );
 
   return (
     <View style={styles.container}>
@@ -32,11 +31,11 @@ const OrdersScreen = () => {
   );
 };
 
-export default connect()(OrdersScreen);
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 18,
   },
 });
+
+export default connect()(OrdersScreen);

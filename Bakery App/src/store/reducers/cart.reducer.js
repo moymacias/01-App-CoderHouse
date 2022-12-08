@@ -1,4 +1,3 @@
-import { CART } from "../../data/cart";
 import { ADD_ITEM, CONFIRM_CART, REMOVE_ITEM } from "../actions/cart.action";
 
 const initialState = {
