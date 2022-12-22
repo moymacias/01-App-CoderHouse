@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,16 +11,22 @@ import { COLORS } from "../constants";
 import { addPlace } from "../store/places.actions";
 import { useDispatch } from "react-redux";
 import ImageSelector from "../components/ImageSelector";
+import LocationSelector from "../components/LocationSelector";
 
-const NewPlaceScreen = ({ navigation }) => {
+const NewPlaceScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const [title, setTitle] = useState("");
+  const [image, setImage] = useState();
+  const [location, setLocation] = useState();
+
+  useEffect(() => {
+    console.log(route, "Nueva Direccion");
+  }, [route]);
 
   const handleTitleChange = (text) => setTitle(text);
 
-  const handleSave = (image) => {
-    console.log(image)
-    dispatch(addPlace(title, image));
+  const handleSave = () => {
+    dispatch(addPlace(title, image, location));
     navigation.navigate("Direcciones");
   };
 
@@ -33,7 +39,11 @@ const NewPlaceScreen = ({ navigation }) => {
           value={title}
           onChangeText={handleTitleChange}
         />
-        <ImageSelector onImage={(image) => handleSave(image)} />
+        <ImageSelector onImage={setImage} />
+        <LocationSelector
+          onLocation={setLocation}
+          mapLocation={route?.params?.mapLocation}
+        />
         <Button
           title="Grabar direccion"
           color={COLORS.MAROON}
