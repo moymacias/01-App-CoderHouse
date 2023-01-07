@@ -14,14 +14,14 @@ const CategoryBreadScreen = ({ navigation, route }) => {
   useEffect(() => {
     dispatch(filteredBread(category.id));
   }, []);
-  
+
   const handleSelectedCategory = (item) => {
     dispatch(selectBread(item.id));
     navigation.navigate("Details", {
       name: item.name,
     });
   };
-  
+
   /* const breads = BREADS.filter(
     (bread) => bread.category === route.params.categoryID
   ); */

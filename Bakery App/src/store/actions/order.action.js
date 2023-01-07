@@ -17,7 +17,7 @@ export const getOrders = () => {
         ...result[key],
         id: key,
       }));
-      console.log(orders)
+      console.log(orders);
       dispatch({ type: GET_ORDERS, payload: orders });
     } catch (error) {
       console.log(error.message);

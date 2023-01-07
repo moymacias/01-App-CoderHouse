@@ -5,49 +5,51 @@ import {
   View,
   TextInput,
   Button,
-} from "react-native";
-import React, { useCallback, useReducer, useEffect } from "react";
+  Alert,
+} from "react-native"
+import React, { useCallback, useReducer, useEffect } from "react"
 
-import { COLORS } from "../constants/colors";
-import { useDispatch } from "react-redux";
-import { useState } from "react";
-import { signup } from "../store/actions/auth.actions";
-import Input from "../components/Input";
+import { COLORS } from "../constants/colors"
+import { useDispatch } from "react-redux"
+import { useState } from "react"
+import { signUp } from "../store/actions/auth.actions"
+import Input from "../components/Input"
 
-const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
+const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE"
 
 const formReducer = (state, action) => {
+  console.log(action)
   if (action.type === FORM_INPUT_UPDATE) {
     const updatedValues = {
       ...state.inputValues,
       [action.input]: action.value,
-    };
+    }
     const updatedValidities = {
       ...state.inputValidities,
       [action.input]: action.isValid,
-    };
-    let updatedFormIsValid = true;
+    }
+    let updatedFormIsValid = true
     for (const key in updatedValidities) {
-      updatedFormIsValid = updatedFormIsValid && updatedValidities[key];
+      updatedFormIsValid = updatedFormIsValid && updatedValidities[key]
     }
     return {
-      formIsValid: updatedFormIsValid,
-      inputValidities: updatedValidities,
       inputValues: updatedValues,
-    };
+      inputValidities: updatedValidities,
+      formIsValid: updatedFormIsValid,
+    }
   }
-  return state;
-};
+  return state
+}
 
 const AuthScreen = () => {
-  const dispatch = useDispatch();
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch()
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     if (error) {
-      Alert.alert("A ocurrido un error", error, [{ text: "Ok" }]);
+      Alert.alert("A ocurrido un error", error, [{ text: "Ok" }])
     }
-  }, [error]);
+  }, [error])
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
@@ -59,23 +61,33 @@ const AuthScreen = () => {
       password: false,
     },
     formIsValid: false,
-  });
+  })
 
   const handleSignUp = () => {
-    dispatch(signup(email, password));
-  };
+    //dispatch(signup(email, password))
+    if (formState.formIsValid) {
+      dispatch(
+        signUp(formState.inputValues.email, formState.inputValues.password)
+      )
+    } else {
+      Alert.alert("formulaio invalido", "Ingresa email y usuario valido", [
+        { text: "ok" },
+      ])
+    }
+  }
 
   const onInputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
+      console.log(inputIdentifier, inputValue, inputValidity)
       dispatchFormState({
         type: FORM_INPUT_UPDATE,
         value: inputValue,
         isValid: inputValidity,
         input: inputIdentifier,
-      });
+      })
     },
     [dispatchFormState]
-  );
+  )
 
   return (
     <KeyboardAvoidingView
@@ -97,19 +109,16 @@ const AuthScreen = () => {
             onInputChange={onInputChangeHandler}
             initialValue=""
           />
-
-          <TextInput
-            style={styles.input}
+          <Input
             id="password"
-            label="Clave"
-            placeholder="hola"
+            label="Password"
             keyboardType="default"
-            secureTextEntry
             required
-            minLength={6}
+            password
+            secureTextEntry
             autoCapitalize="none"
-            errorText="Por favor ingrese un password"
-            //onChangeText={setPassword}
+            errorText="Por favor ingrese una contrasena valida"
+            onInputChange={onInputChangeHandler}
             initialValue=""
           />
         </View>
@@ -133,10 +142,10 @@ const AuthScreen = () => {
         </View>
       </View>
     </KeyboardAvoidingView>
-  );
-};
+  )
+}
 
-export default AuthScreen;
+export default AuthScreen
 
 const styles = StyleSheet.create({
   screen: {
@@ -147,7 +156,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontFamily: "open-sans-bold",
+    //fontFamily: "open-sans-bold",
     marginBottom: 18,
   },
   container: {
@@ -170,4 +179,4 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
   },
-});
+})

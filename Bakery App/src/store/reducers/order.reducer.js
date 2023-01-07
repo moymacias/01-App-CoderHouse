@@ -16,4 +16,4 @@ const OrderReducer = (state = initalState, action) => {
   }
 };
 
-export default OrderReducer
+export default OrderReducer;

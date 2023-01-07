@@ -1,8 +1,8 @@
-import React, { useEffect, useReducer } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import React, { useEffect, useReducer } from "react"
+import { StyleSheet, Text, TextInput, View } from "react-native"
 
-const INPUT_CHANGE = "INPUT_CHANGE";
-const INPUT_BLUR = "INPUT_BLUR";
+const INPUT_CHANGE = "INPUT_CHANGE"
+const INPUT_BLUR = "INPUT_BLUR"
 
 const inputReducer = (state, action) => {
   switch (action.type) {
@@ -11,51 +11,49 @@ const inputReducer = (state, action) => {
         ...state,
         value: action.value,
         isValid: action.isValid,
-      };
+      }
     case INPUT_BLUR:
       return {
         ...state,
         touched: true,
-      };
+      }
     default:
-      return state;
+      return state
   }
-};
+}
 
 const Input = (props) => {
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: props.initialValue ? props.initialValue : "",
     isValid: props.initiallyValid,
     touched: false,
-  });
+  })
 
-  const { onInputChange, id } = props;
+  const { onInputChange, id } = props
 
   useEffect(() => {
-    if (inputState.touched) {
-      onInputChange(id, inputState.value, inputState.isValid);
-    }
-  }, [inputState, onInputChange, id]);
+    onInputChange(id, inputState.value, inputState.isValid)
+  }, [inputState, onInputChange, id])
 
   const textChangeHandler = (text) => {
     const emailRegex =
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    let isValid = true;
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    let isValid = true
 
-    if (props.requiered && text.trim().length === 0) isValid = false;
-    if (props.email && !emailRegex.test(text.toLowerCase())) isValid = false;
-    if (props.max != null && +text > props.max) isValid = false;
+    if (props.requiered && text.trim().length === 0) isValid = false
+    if (props.email && !emailRegex.test(text.toLowerCase())) isValid = false
+    if (props.max != null && +text > props.max) isValid = false
     if (props.minLength != null && text.length < props.minLength)
-      isValid = false;
+      isValid = false
 
     dispatch({
       type: INPUT_CHANGE,
       value: text,
       isValid: isValid,
-    });
-  };
+    })
+  }
 
-  const onBlurHandler = () => dispatch({ type: INPUT_BLUR });
+  const onBlurHandler = () => dispatch({ type: INPUT_BLUR })
 
   return (
     <View style={styles.formControl}>
@@ -73,10 +71,10 @@ const Input = (props) => {
         </View>
       )}
     </View>
-  );
-};
+  )
+}
 
-export default Input;
+export default Input
 
 const styles = StyleSheet.create({
   formControl: {
@@ -99,4 +97,4 @@ const styles = StyleSheet.create({
   errorText: {
     color: "#ff0000",
   },
-});
+})
